@@ -1,11 +1,13 @@
 %define lib_major 1
-%define lib_name  %mklibname %{name} %{lib_major}
-%define gdk_lib_name %mklibname gdkimlib %{lib_major}
+%define libname  %mklibname %{name} %{lib_major}
+%define gdk_libname %mklibname gdkimlib %{lib_major}
+%define develname %mklibname %{name} -d
+%define gdk_develname %mklibname gdkimlib -d
 
-Summary:	An image loading and rendering library for X11R6
+Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
@@ -13,7 +15,8 @@ BuildRequires:	gtk+-devel >= 1.2.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
-BuildRequires:	libungif-devel autoconf2.1
+BuildRequires:	libungif-devel 
+BuildRequires:	autoconf
 BuildRequires:	chrpath
 Source0:	ftp://ftp.gnome.org/pub/GNOME/stable/sources/imlib/1.9/%{name}-%{version}.tar.bz2
 Source1:	imlib-pofiles.tar.bz2
@@ -39,56 +42,58 @@ Imlib is designed to simplify and speed up the process of loading images
 and obtaining X Window System drawables.  Imlib provides many simple
 manipulation routines which can be used for common operations.  
 
-Install imlib if you need an image loading and rendering library for X11R6.
+Install imlib if you need an image loading and rendering library.
 You may also want to install the imlib-cfgeditor package, which will help
 you configure Imlib.
 
-%package -n	%{lib_name}
+%package -n	%{libname}
 Summary:	Main library for %{name} 
 Group:		System/Libraries
 Requires:	%{name}
 
-%description -n	%{lib_name}
+%description -n	%{libname}
 This package contains the library needed to run programs dynamically
 linked with %{name}.
 
-%package -n	%{lib_name}-devel
+%package -n	%{develname}
 Summary:	Includes and other files to develop %{name} applications
 Group:		Development/GNOME and GTK+
-Requires:	%{lib_name} = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel 
+Requires:	%{libname} = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel 
 Provides:	lib%{name}-devel = %{version}
 Provides:	imlib-devel = %{version}
 Obsoletes:	imlib-devel
+Obsoletes:	%{_lib}%{name}1-devel
 
-%description -n	%{lib_name}-devel
+%description -n	%{develname}
 The header files, static libraries and documentation needed for
 developing Imlib applications.  Imlib is an image loading and rendering
-library for X11R6.
+library.
 
 Install the imlib-devel package if you want to develop Imlib applications.
 You'll also need to install the imlib and imlib_cfgeditor packages.
 
-%package -n	%{gdk_lib_name}
+%package -n	%{gdk_libname}
 Summary:	GDK version of the imlib library
 Group:          System/Libraries
 Requires:       %{name}
-Conflicts:	%{lib_name} < 1.9.15
+Conflicts:	%{libname} < 1.9.15
 
-%description -n %{gdk_lib_name}
+%description -n %{gdk_libname}
 This package contains the library needed to run programs dynamically
 linked with the gdk version of %{name}.
 
-%package -n     %{gdk_lib_name}-devel
+%package -n     %{gdk_develname}
 Summary:        Includes and other files to develop %{name} applications
 Group:          Development/GNOME and GTK+
-Requires:       %{gdk_lib_name} = %{version} %{lib_name}-devel = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel libgtk+-devel
+Requires:       %{gdk_libname} = %{version} %{libname}-devel = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel libgtk+-devel
 Provides:       libgdk%{name}-devel = %{version}
 Provides:       gdkimlib-devel = %{version}
+Obsoletes:	%{_lib}gdkimlib1-devel
 
-%description -n %{gdk_lib_name}-devel
+%description -n %{gdk_develname}
 The header files, static libraries and documentation needed for
 developing gdk_imlib applications.  gdk_imlib is an image loading and rendering
-library for X11R6.
+library.
 	
 %package	cfgeditor
 Summary:	A configuration editor for the Imlib library
@@ -144,23 +149,23 @@ chrpath -d $RPM_BUILD_ROOT%{_libdir}/*.so*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -n %{lib_name} -p /sbin/ldconfig
-%post -n %{gdk_lib_name} -p /sbin/ldconfig
+%post -n %{libname} -p /sbin/ldconfig
+%post -n %{gdk_libname} -p /sbin/ldconfig
 
-%postun -n %{lib_name} -p /sbin/ldconfig
-%postun -n %{gdk_lib_name} -p /sbin/ldconfig
+%postun -n %{libname} -p /sbin/ldconfig
+%postun -n %{gdk_libname} -p /sbin/ldconfig
 
 %files 
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog
 %config(noreplace) %{_sysconfdir}/*
 
-%files -n %{lib_name}
+%files -n %{libname}
 %defattr(-, root, root)
 %doc README
 %attr(755,root,root) %{_libdir}/libImlib.so.*
 
-%files -n %{gdk_lib_name}
+%files -n %{gdk_libname}
 %defattr(-, root, root)
 %{_libdir}/libgdk_imlib.so.*
 %{_libdir}/libimlib-*.so
@@ -171,7 +176,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/imlib_config
 %{_mandir}/man1/imlib_config*
 
-%files -n %{lib_name}-devel
+%files -n %{develname}
 %defattr(-, root, root)
 %doc doc/*.gif doc/*.html README AUTHORS ChangeLog
 %{_bindir}/imlib-config
@@ -183,7 +188,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libImlib.so
 %{_libdir}/pkgconfig/imlib.pc
 
-%files -n %{gdk_lib_name}-devel
+%files -n %{gdk_develname}
 %defattr(-, root, root)
 %{_includedir}/gdk_*
 %{_libdir}/pkgconfig/imlibgdk.pc
