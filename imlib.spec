@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
@@ -85,7 +85,7 @@ linked with the gdk version of %{name}.
 %package -n     %{gdk_develname}
 Summary:        Includes and other files to develop %{name} applications
 Group:          Development/GNOME and GTK+
-Requires:       %{gdk_libname} = %{version} %{libname}-devel = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel libgtk+-devel
+Requires:       %{gdk_libname} = %{version} %{develname} = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel libgtk+-devel
 Provides:       libgdk%{name}-devel = %{version}
 Provides:       gdkimlib-devel = %{version}
 Obsoletes:	%{_lib}gdkimlib1-devel
