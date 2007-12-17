@@ -22,7 +22,6 @@ Source0:	ftp://ftp.gnome.org/pub/GNOME/stable/sources/imlib/1.9/%{name}-%{versio
 Source1:	imlib-pofiles.tar.bz2
 Obsoletes:	Imlib
 Provides:	Imlib
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.enlightenment.org/Libraries/Imlib/	
 
 Patch0:		imlib-1.9-m4.patch.bz2
