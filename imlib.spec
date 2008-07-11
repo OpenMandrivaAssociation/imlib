@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 6
+Release:	%mkrel 7
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
@@ -123,6 +123,8 @@ autoconf
 #define __libtoolize  /bin/true
 
 %build
+export X_LIBS="-lX11"
+
 %configure
 %make 
 
