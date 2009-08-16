@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 7
+Release:	%mkrel 8
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
@@ -28,7 +28,7 @@ URL:		http://www.enlightenment.org/Libraries/Imlib/
 Patch0:		imlib-1.9-m4.patch.bz2
 Patch1:		imlib-1.9.11-i18n.patch.bz2
 Patch2:		imlib-1.9.10-path.patch.bz2
-Patch3:		imlib-1.9.14-no-locincpth.patch.bz2
+Patch3:		imlib-1.9.15-no-locincpth.patch
 Patch5:		imlib-1.9.13-secfixes.patch.bz2
 Patch6:		imlib-1.9.14-fix-underquoted-calls.patch.bz2
 
@@ -119,14 +119,12 @@ imlib_cfgeditor.
 %patch6 -p1 -b .underquoted
 autoconf
 
-# this is needed to avoid running libtoolize -- pablo
-#define __libtoolize  /bin/true
-
 %build
 export X_LIBS="-lX11"
 
-%configure
-%make 
+%define _disable_ld_no_undefined 1
+%configure2_5x
+%make
 
 %install
 rm -rf $RPM_BUILD_ROOT
