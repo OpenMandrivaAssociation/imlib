@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 8
+Release:	%mkrel 9
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
@@ -31,6 +31,7 @@ Patch2:		imlib-1.9.10-path.patch.bz2
 Patch3:		imlib-1.9.15-no-locincpth.patch
 Patch5:		imlib-1.9.13-secfixes.patch.bz2
 Patch6:		imlib-1.9.14-fix-underquoted-calls.patch.bz2
+Patch7:     imlib-1.9.15-max-24bpp.diff
 
 # Comment to Source1 :
 # I don't understand why official imlib dropped i18n support ?! all
@@ -117,6 +118,8 @@ imlib_cfgeditor.
 %patch3 -p1 -b .no-locincpth
 %patch5 -p1 -b .can-2004-1025_1026
 %patch6 -p1 -b .underquoted
+%patch7 -p0
+
 autoconf
 
 %build
@@ -148,20 +151,6 @@ chrpath -d $RPM_BUILD_ROOT%{_libdir}/*.so*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%post -n %{gdk_libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{gdk_libname} -p /sbin/ldconfig
-%endif
 
 %files 
 %defattr(-,root,root)
