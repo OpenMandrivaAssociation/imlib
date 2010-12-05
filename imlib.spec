@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 9
+Release:	%mkrel 10
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
