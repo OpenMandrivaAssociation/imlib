@@ -7,10 +7,12 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 10
+Release:	%mkrel 11
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
+BuildRequires:	libx11-devel
+BuildRequires:	libxext-devel
 BuildRequires:	gtk+-devel >= 1.2.1
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
@@ -24,14 +26,14 @@ Obsoletes:	Imlib
 Provides:	Imlib
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:		http://www.enlightenment.org/Libraries/Imlib/	
-
-Patch0:		imlib-1.9-m4.patch.bz2
-Patch1:		imlib-1.9.11-i18n.patch.bz2
-Patch2:		imlib-1.9.10-path.patch.bz2
+Patch0:		imlib-1.9-m4.patch
+Patch1:		imlib-1.9.11-i18n.patch
+Patch2:		imlib-1.9.10-path.patch
 Patch3:		imlib-1.9.15-no-locincpth.patch
-Patch5:		imlib-1.9.13-secfixes.patch.bz2
-Patch6:		imlib-1.9.14-fix-underquoted-calls.patch.bz2
-Patch7:     imlib-1.9.15-max-24bpp.diff
+Patch5:		imlib-1.9.13-secfixes.patch
+Patch6:		imlib-1.9.14-fix-underquoted-calls.patch
+Patch7:		imlib-1.9.15-max-24bpp.diff
+Patch8:		imlib-1.9.15-link.patch
 
 # Comment to Source1 :
 # I don't understand why official imlib dropped i18n support ?! all
@@ -59,7 +61,7 @@ linked with %{name}.
 %package -n	%{develname}
 Summary:	Includes and other files to develop %{name} applications
 Group:		Development/GNOME and GTK+
-Requires:	%{libname} = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel 
+Requires:	%{libname} = %{version}
 Provides:	lib%{name}-devel = %{version}
 Provides:	imlib-devel = %{version}
 Obsoletes:	imlib-devel
@@ -86,7 +88,8 @@ linked with the gdk version of %{name}.
 %package -n     %{gdk_develname}
 Summary:        Includes and other files to develop %{name} applications
 Group:          Development/GNOME and GTK+
-Requires:       %{gdk_libname} = %{version} %{develname} = %{version} libjpeg-devel libpng-devel libtiff-devel libungif-devel libgtk+-devel
+Requires:       %{gdk_libname} = %{version}
+Requires:	%{develname} = %{version}
 Provides:       libgdk%{name}-devel = %{version}
 Provides:       gdkimlib-devel = %{version}
 Obsoletes:	%{_lib}gdkimlib1-devel
@@ -119,14 +122,11 @@ imlib_cfgeditor.
 %patch5 -p1 -b .can-2004-1025_1026
 %patch6 -p1 -b .underquoted
 %patch7 -p0
-
-autoconf
+%patch8 -p1 -b .link
 
 %build
-export X_LIBS="-lX11"
-
-%define _disable_ld_no_undefined 1
-%configure2_5x
+autoreconf -fi
+%configure2_5x --disable-gtktest
 %make
 
 %install
@@ -160,12 +160,11 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{libname}
 %defattr(-, root, root)
 %doc README
-%attr(755,root,root) %{_libdir}/libImlib.so.*
+%attr(755,root,root) %{_libdir}/libImlib.so.%{lib_major}*
 
 %files -n %{gdk_libname}
 %defattr(-, root, root)
-%{_libdir}/libgdk_imlib.so.*
-%{_libdir}/libimlib-*.so
+%{_libdir}/libgdk_imlib.so.%{lib_major}*
 
 %files cfgeditor -f %{name}.lang
 %defattr(-,root,root)
@@ -191,4 +190,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/imlibgdk.pc
 %{_libdir}/libgdk_imlib.so
 %{_libdir}/libgdk_imlib*a
-%{_libdir}/libimlib-*a
