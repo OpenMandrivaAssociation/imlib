@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	%mkrel 11
+Release:	%mkrel 12
 License:	LGPL
 Group:		System/Libraries
 BuildRequires:	gettext
@@ -34,6 +34,7 @@ Patch5:		imlib-1.9.13-secfixes.patch
 Patch6:		imlib-1.9.14-fix-underquoted-calls.patch
 Patch7:		imlib-1.9.15-max-24bpp.diff
 Patch8:		imlib-1.9.15-link.patch
+Patch9:		imlib-1.9.15-libpng15.diff
 
 # Comment to Source1 :
 # I don't understand why official imlib dropped i18n support ?! all
@@ -123,6 +124,7 @@ imlib_cfgeditor.
 %patch6 -p1 -b .underquoted
 %patch7 -p0
 %patch8 -p1 -b .link
+%patch9 -p1 -b .libpng15
 
 %build
 autoreconf -fi
