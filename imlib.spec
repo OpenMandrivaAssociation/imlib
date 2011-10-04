@@ -179,12 +179,15 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/*.gif doc/*.html README AUTHORS ChangeLog
 %{_bindir}/imlib-config
 %multiarch %{multiarch_bindir}/imlib-config
+
 %{_mandir}/man1/imlib-config*
+# note, the blank line above is needed due to some borked rpm5 macro
 %{_libdir}/libImlib*a
 %{_includedir}/Imlib*
 %{_datadir}/aclocal/*
 %{_libdir}/libImlib.so
 %{_libdir}/pkgconfig/imlib.pc
+
 
 %files -n %{gdk_develname}
 %defattr(-, root, root)
