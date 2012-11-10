@@ -1,0 +1,41 @@
+--- imlib-1.9.15/Imlib/Makefile.am.link	2011-02-05 11:00:47.000000000 +0100
++++ imlib-1.9.15/Imlib/Makefile.am	2011-02-05 11:02:31.000000000 +0100
+@@ -32,8 +32,7 @@
+ 
+ libImlib_la_LDFLAGS    = -version-info 10:15:9
+ #libImlib_la_LDDADD     = $(SUPPORT_LIBS)
+-libImlib_la_LIBADD     = $(SUPPORT_LIBS) $(X_PRE_LIBS) \
+-			 $(X_LIBS) $(X_EXTRA_LIBS)
++libImlib_la_LIBADD     = $(SUPPORT_LIBS) $(X_LIBS)
+ 
+ DEFS =  -DSYSTEM_IMRC=\"$(sysconfdir)/imrc\" \
+ 	-DSYSCONFDIR=\"$(sysconfdir)\"
+--- imlib-1.9.15/gdk_imlib/Makefile.am.link	2011-02-05 10:55:20.000000000 +0100
++++ imlib-1.9.15/gdk_imlib/Makefile.am	2011-02-05 10:55:39.000000000 +0100
+@@ -87,7 +87,7 @@
+ 
+ 
+ libgdk_imlib_la_LDFLAGS = -version-info 10:15:9
+-libgdk_imlib_la_LIBADD = $(GX_LIBS)
++libgdk_imlib_la_LIBADD = $(GX_LIBS) $(GDK_SUPPORT_LIBS)
+ 
+ 
+ include_HEADERS = gdk_imlib.h gdk_imlib_private.h gdk_imlib_types.h
+--- imlib-1.9.15/imlib.pc.in.link	2011-02-05 11:02:52.000000000 +0100
++++ imlib-1.9.15/imlib.pc.in	2011-02-05 11:03:33.000000000 +0100
+@@ -9,5 +9,5 @@
+ Description: An image loading and rendering library for X11R6
+ Version: @VERSION@
+ Requires:
+-Libs: -L${libdir} @LDFLAGS@ -lImlib @SUPPORT_LIBS@ @X_LIBS@ @X_PRE_LIBS@ -lXext -lX11 @X_EXTRA_LIBS@
++Libs: -L${libdir} -lImlib @SUPPORT_LIBS@ -lXext -lX11
+ Cflags: -I${includedir} @X_CFLAGS@
+--- imlib-1.9.15/imlibgdk.pc.in.link	2011-02-05 11:11:12.000000000 +0100
++++ imlib-1.9.15/imlibgdk.pc.in	2011-02-05 11:11:35.000000000 +0100
+@@ -9,5 +9,5 @@
+ Description: GDK support libraries for Imlib
+ Version: @VERSION@
+ Requires: gdk,gmodule
+-Libs: -lgdk_imlib @GDK_SUPPORT_LIBS@
++Libs: -lgdk_imlib @GDK_SUPPORT_LIBS@ -lXext -lX11
+ Cflags:

@@ -1,0 +1,20 @@
+--- imlib-1.9.10/gdk_imlib/modules.c.orig	Thu Apr 12 17:50:49 2001
++++ imlib-1.9.10/gdk_imlib/modules.c	Thu Apr 12 17:59:55 2001
+@@ -78,13 +78,15 @@
+ 			 void **loader, void *def_loader,
+ 			 void **saver,  void *def_saver)
+ {
+-	char *path, *modname;
++	char *imlib_path, *path, *modname;
+ 	GModule *m;
+ 	gboolean v;
+ 	void *ptr;
+ 
+ 	modname = g_strconcat ("imlib-", mod, NULL);
+-	path = g_module_build_path (IMLIB_LIB, modname);
++	imlib_path = getenv("GDK_IMLIB_PATH");
++	if (!imlib_path || !*imlib_path) imlib_path = IMLIB_LIB;
++	path = g_module_build_path (imlib_path, modname);
+ 	g_free (modname);
+ 
+ 	m = g_module_open (path, G_MODULE_BIND_LAZY);

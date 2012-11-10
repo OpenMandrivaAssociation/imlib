@@ -1,0 +1,146 @@
+diff -Naurp imlib-1.9.15/gdk_imlib/io-png.c imlib-1.9.15.oden/gdk_imlib/io-png.c
+--- imlib-1.9.15/gdk_imlib/io-png.c	2002-03-04 12:06:29.000000000 -0500
++++ imlib-1.9.15.oden/gdk_imlib/io-png.c	2011-10-04 05:39:45.355555218 -0400
+@@ -40,13 +40,13 @@ loader_png (FILE * f, int *w, int *h, in
+       return NULL;
+     }
+ 
+-  if (setjmp(png_ptr->jmpbuf))
++  if (setjmp(png_jmpbuf(png_ptr)))
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+     }
+ 
+-  if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
++  if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+@@ -275,13 +275,13 @@ inline_png(unsigned char *data, int data
+       return NULL;
+     }
+   
+-  if (setjmp(png_ptr->jmpbuf))
++  if (setjmp(png_jmpbuf(png_ptr)))
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+     }
+   
+-  if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
++  if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+@@ -301,6 +301,9 @@ inline_png(unsigned char *data, int data
+   /* Setup Translators */
+   if (color_type == PNG_COLOR_TYPE_PALETTE)
+     png_set_expand(png_ptr);
++  if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
++    png_set_expand(png_ptr);
++
+   png_set_strip_16(png_ptr);
+   png_set_packing(png_ptr);
+   if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+@@ -440,13 +443,13 @@ _loader_alpha_png (FILE * f, int *w, int
+ 		return NULL;
+ 	}
+ 	
+-	if (setjmp(png_ptr->jmpbuf))
++	if (setjmp(png_jmpbuf(png_ptr)))
+ 	{
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+ 		return NULL;
+ 	}
+ 	
+-	if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
++	if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
+ 	{
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+ 		return NULL;
+@@ -635,7 +638,7 @@ saver_png (GdkImlibImage *im, char *file
+ 	      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+ 	      return 0;
+ 	    }
+-	  if (setjmp(png_ptr->jmpbuf))
++	  if (setjmp(png_jmpbuf(png_ptr)))
+ 	    {
+ 	      fclose(f);
+ 	      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+diff -Naurp imlib-1.9.15/Imlib/load.c imlib-1.9.15.oden/Imlib/load.c
+--- imlib-1.9.15/Imlib/load.c	2011-10-04 05:39:27.975555049 -0400
++++ imlib-1.9.15.oden/Imlib/load.c	2011-10-04 05:39:45.355555218 -0400
+@@ -197,12 +197,12 @@ _LoadPNG(ImlibData * id, FILE * f, int *
+       png_destroy_read_struct(&png_ptr, NULL, NULL);
+       return NULL;
+     }
+-  if (setjmp(png_ptr->jmpbuf))
++  if (setjmp(png_jmpbuf(png_ptr)))
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+     }
+-  if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
++  if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+@@ -260,7 +260,8 @@ _LoadPNG(ImlibData * id, FILE * f, int *
+   png_read_image(png_ptr, lines);
+   png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+   ptr = data;
+-  if (color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
++  if (color_type == PNG_COLOR_TYPE_GRAY
++      || color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+     {
+       for (y = 0; y < *h; y++)
+ 	{
+@@ -285,6 +286,7 @@ _LoadPNG(ImlibData * id, FILE * f, int *
+ 	    }
+ 	}
+     }
++#if 0
+   else if (color_type == PNG_COLOR_TYPE_GRAY)
+     {
+       for (y = 0; y < *h; y++)
+@@ -300,6 +302,7 @@ _LoadPNG(ImlibData * id, FILE * f, int *
+ 	    }
+ 	}
+     }
++#endif
+   else
+     {
+       for (y = 0; y < *h; y++)
+diff -Naurp imlib-1.9.15/Imlib/save.c imlib-1.9.15.oden/Imlib/save.c
+--- imlib-1.9.15/Imlib/save.c	2004-09-20 20:22:59.000000000 -0400
++++ imlib-1.9.15.oden/Imlib/save.c	2011-10-04 05:39:45.355555218 -0400
+@@ -342,7 +342,7 @@ Imlib_save_image(ImlibData * id, ImlibIm
+ 	      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+ 	      return 0;
+ 	    }
+-	  if (setjmp(png_ptr->jmpbuf))
++	  if (setjmp(png_jmpbuf(png_ptr)))
+ 	    {
+ 	      fclose(f);
+ 	      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+diff -Naurp imlib-1.9.15/Imlib/utils.c imlib-1.9.15.oden/Imlib/utils.c
+--- imlib-1.9.15/Imlib/utils.c	2011-10-04 05:39:27.975555049 -0400
++++ imlib-1.9.15.oden/Imlib/utils.c	2011-10-04 05:39:45.355555218 -0400
+@@ -1981,14 +1981,13 @@ Imlib_inlined_png_to_image(ImlibData *id
+       png_destroy_read_struct(&png_ptr, NULL, NULL);
+       return NULL;
+     }
+-  
+-  if (setjmp(png_ptr->jmpbuf))
++  if (setjmp(png_jmpbuf(png_ptr)))  
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;
+     }
+   
+-  if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
++  if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
+     {
+       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+       return NULL;

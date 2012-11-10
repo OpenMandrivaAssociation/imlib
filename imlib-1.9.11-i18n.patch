@@ -1,0 +1,42 @@
+--- imlib-1.9.11/utils/imlib_config.c.orig	Tue Jul 17 17:57:45 2001
++++ imlib-1.9.11/utils/imlib_config.c	Fri Aug  3 14:32:45 2001
+@@ -2,6 +2,9 @@
+ #ifndef GNOMELOCALEDIR
+ #define GNOMELOCALEDIR "/usr/share/locale"
+ #endif
++#ifndef ENABLE_NLS
++#define ENABLE_NLS 1
++#endif
+ #include <locale.h>
+ #ifdef ENABLE_NLS
+ #    include <libintl.h>
+@@ -424,7 +427,9 @@
+    FILE               *ff;
+    int                 r, g, b, i;
+    char                s[1024];
++   char                locale[256];
+ 
++  strncpy (locale, setlocale(LC_ALL, ""), 256);
+   setlocale(LC_ALL, "C");
+   ff = fopen(f, "r");
+    if (ff)
+@@ -460,7 +465,7 @@
+       color.color[i][1] = 0;
+       color.color[i][2] = 0;
+      }
+-  setlocale(LC_ALL, "");
++  setlocale(LC_ALL, locale);
+ }
+ 
+ void
+@@ -1500,6 +1505,10 @@
+ main(int argc, char **argv)
+ {
+    gtk_set_locale();
++#ifdef ENABLE_NLS
++   bindtextdomain(PACKAGE,GNOMELOCALEDIR);
++   textdomain(PACKAGE);
++#endif
+    gtk_init(&argc, &argv);
+    gdk_imlib_init();
+    list_vis();

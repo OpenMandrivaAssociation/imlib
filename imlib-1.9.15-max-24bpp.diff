@@ -1,0 +1,26 @@
+Index: Imlib/misc.c
+===================================================================
+--- Imlib/misc.c
++++ Imlib/misc.c	2010-02-15 16:23:10.000000000 +0100
+@@ -423,6 +423,8 @@
+ 	      if (xvir[i].depth > max)
+ 		max = xvir[i].depth;
+ 	    }
++      if (max > 24)
++        max = 24;
+ 	  if (max > 8)
+ 	    {
+ 	      id->x.depth = max;
+Index: gdk_imlib/misc.c
+===================================================================
+--- gdk_imlib/misc.c
++++ gdk_imlib/misc.c	2010-02-15 16:22:41.000000000 +0100
+@@ -455,6 +455,8 @@
+ 	      if (xvir[i].depth > max)
+ 		max = xvir[i].depth;
+ 	    }
++       if (max > 24)
++         max = 24;
+ 	  if (max > 8)
+ 	    {
+ 	      id->x.depth = max;
