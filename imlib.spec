@@ -22,6 +22,7 @@ Patch6:		imlib-1.9.14-fix-underquoted-calls.patch
 Patch7:		imlib-1.9.15-max-24bpp.diff
 Patch8:		imlib-1.9.15-link.patch
 Patch9:		imlib-1.9.15-libpng15.diff
+Patch10:	PrintGifError_renamed_to_GifErrorString_4.2.1.patch
 BuildRequires:	gettext
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xext)
@@ -119,11 +120,12 @@ imlib_cfgeditor.
 %patch7 -p0
 %patch8 -p1 -b .link
 %patch9 -p1 -b .libpng15
+%patch10 -p1 -b giferror
 
 %build
 autoreconf -fi
 %configure2_5x --disable-gtktest --disable-static
-%make
+%make LIBS="-lgif"
 
 %install
 %makeinstall_std
@@ -162,7 +164,8 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 %files -n %{develname}
 %doc doc/*.gif doc/*.html README AUTHORS ChangeLog
 %{_bindir}/imlib-config
-%multiarch %{multiarch_bindir}/imlib-config
+#multiarch 
+%{multiarch_bindir}/imlib-config
 
 %{_mandir}/man1/imlib-config*
 # note, the blank line above is needed due to some borked rpm5 macro

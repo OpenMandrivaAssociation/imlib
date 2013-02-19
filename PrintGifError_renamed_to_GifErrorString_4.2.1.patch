@@ -1,0 +1,42 @@
+diff --git a/Imlib/load.c b/Imlib/load.c
+index 235eab9..9f39209 100644
+--- a/Imlib/load.c
++++ b/Imlib/load.c
+@@ -462,14 +462,14 @@ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
+     {
+       if (DGifGetRecordType(gif, &rec) == GIF_ERROR)
+ 	{
+-	  PrintGifError();
++	  GifErrorString();
+ 	  rec = TERMINATE_RECORD_TYPE;
+ 	}
+       if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done))
+ 	{
+ 	  if (DGifGetImageDesc(gif) == GIF_ERROR)
+ 	    {
+-	      PrintGifError();
++	      GifErrorString();
+ 	      rec = TERMINATE_RECORD_TYPE;
+ 	    }
+ 	  *w = gif->Image.Width;
+diff --git a/gdk_imlib/io-gif.c b/gdk_imlib/io-gif.c
+index 785d27e..5f3210d 100644
+--- a/gdk_imlib/io-gif.c
++++ b/gdk_imlib/io-gif.c
+@@ -43,14 +43,14 @@ loader_gif(FILE *f, int *w, int *h, int *t)
+     {
+       if (DGifGetRecordType(gif, &rec) == GIF_ERROR)
+ 	{
+-	  PrintGifError();
++	  GifErrorString();
+ 	  rec = TERMINATE_RECORD_TYPE;
+ 	}
+       if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done))
+ 	{
+ 	  if (DGifGetImageDesc(gif) == GIF_ERROR)
+ 	    {
+-	      PrintGifError();
++	      GifErrorString();
+ 	      rec = TERMINATE_RECORD_TYPE;
+ 	    }
+ 	  *w = gif->Image.Width;
