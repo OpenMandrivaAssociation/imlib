@@ -23,6 +23,7 @@ Patch7:		imlib-1.9.15-max-24bpp.diff
 Patch8:		imlib-1.9.15-link.patch
 Patch9:		imlib-1.9.15-libpng15.diff
 Patch10:	PrintGifError_renamed_to_GifErrorString_4.2.1.patch
+Patch11:	imlib-1.9.15-giflib5.patch
 BuildRequires:	gettext
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xext)
@@ -121,6 +122,7 @@ imlib_cfgeditor.
 %patch8 -p1 -b .link
 %patch9 -p1 -b .libpng15
 %patch10 -p1 -b giferror
+%patch11 -p1 -b .giflib5~
 
 %build
 autoreconf -fi
