@@ -7,7 +7,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	14
+Release:	15
 License:	LGPL
 Group:		System/Libraries
 URL:		http://www.enlightenment.org/Libraries/Imlib/	
@@ -96,7 +96,7 @@ The header files, static libraries and documentation needed for
 developing gdk_imlib applications.  gdk_imlib is an image loading and rendering
 library.
 	
-%package	cfgeditor
+%package cfgeditor
 Summary:	A configuration editor for the Imlib library
 Group:		System/Libraries
 Requires:	%{name}
@@ -148,18 +148,15 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 %find_lang %{name}
 
 %files
-%doc README AUTHORS ChangeLog
 %config(noreplace) %{_sysconfdir}/*
 
 %files -n %{libname}
-%doc README
 %attr(755,root,root) %{_libdir}/libImlib.so.%{lib_major}*
 
 %files -n %{gdk_libname}
 %{_libdir}/libgdk_imlib.so.%{lib_major}*
 
 %files cfgeditor -f %{name}.lang
-%doc README
 %{_bindir}/imlib_config
 %{_mandir}/man1/imlib_config*
 
@@ -183,7 +180,7 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 
 
 %changelog
-* Tue Dec 06 2011 Götz Waschk <waschk@mandriva.org> 1.9.15-13mdv2012.0
+* Tue Dec 06 2011 GÃ¶tz Waschk <waschk@mandriva.org> 1.9.15-13mdv2012.0
 + Revision: 738277
 - rebuild
 
@@ -201,11 +198,11 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 + Revision: 611183
 - rebuild
 
-* Mon Feb 15 2010 Nicolas Lécureuil <nlecureuil@mandriva.com> 1.9.15-9mdv2010.1
+* Mon Feb 15 2010 Nicolas LÃ©cureuil <nlecureuil@mandriva.com> 1.9.15-9mdv2010.1
 + Revision: 506174
 - Add patch fixing Imlib render
 
-* Sun Aug 16 2009 Götz Waschk <waschk@mandriva.org> 1.9.15-8mdv2010.0
+* Sun Aug 16 2009 GÃ¶tz Waschk <waschk@mandriva.org> 1.9.15-8mdv2010.0
 + Revision: 416903
 - rediff patch 3
 - fix build
@@ -251,10 +248,10 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 - Split gdk and non_gdk version of library
 - (sb) rpmlint
 
-* Wed Jun 21 2006 Götz Waschk <waschk@mandriva.org> 1.9.14-14mdk
+* Wed Jun 21 2006 GÃ¶tz Waschk <waschk@mandriva.org> 1.9.14-14mdk
 - Rebuild
 
-* Wed Jan 25 2006 Per Øyvind Karlsen <pkarlsen@mandriva.com> 1.9.14-13mdk
+* Wed Jan 25 2006 Per Ã˜yvind Karlsen <pkarlsen@mandriva.com> 1.9.14-13mdk
 - fix underquoted calls (P6)
 - %%mkrel
 
@@ -267,7 +264,7 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 * Fri Oct 08 2004 Frederic Crozat <fcrozat@mandrakesoft.com> 1.9.14-10mdk
 - Patch4: security fix for CAN-2004-0817
 
-* Tue Jun 08 2004 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 1.9.14-9mdk
+* Tue Jun 08 2004 Per Ã˜yvind Karlsen <peroyvind@linux-mandrake.com> 1.9.14-9mdk
 - fix buildrequires
 - cosmetics
 
@@ -341,7 +338,7 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 * Sat May 26 2001 Stefan van der Eijk <stefan@eijk.nu> 1.9.10-6mdk
 - remove %%{_libdir}/libimlib-*.so --> typo + duplicates the line above.
 
-* Thu Apr 12 2001 Fran�ois Pons <fpons@mandrakesoft.com> 1.9.10-5mdk
+* Thu Apr 12 2001 François Pons <fpons@mandrakesoft.com> 1.9.10-5mdk
 - Add patch to take care of environment GDK_IMLIB_PATH.
 
 * Tue Apr 10 2001 Geoffrey Lee <snailtalk@mandrakesoft.com> 1.9.10-4mdk
