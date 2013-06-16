@@ -1,3 +1,4 @@
+%bcond_with gtk1
 %define url_ver %(echo %{version}|cut -d. -f1,2)
 
 %define major 1
@@ -9,7 +10,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	15
+Release:	16
 License:	LGPLv2
 Group:		System/Libraries
 Url:		http://www.enlightenment.org/Libraries/Imlib/	
@@ -26,13 +27,13 @@ Patch8:		imlib-1.9.15-link.patch
 Patch9:		imlib-1.9.15-libpng15.diff
 Patch10:	PrintGifError_renamed_to_GifErrorString_4.2.1.patch
 Patch11:	imlib-1.9.15-giflib5.patch
+Patch12:	imlib-1.9.15-no-gtk1.patch
 
 BuildRequires:	chrpath
 BuildRequires:	gettext
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	ungif-devel
-BuildRequires:	pkgconfig(gtk+)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(xext)
 BuildRequires:	pkgconfig(x11)
@@ -131,26 +132,42 @@ for i in po/*.po ; do
   msgfmt -v -o %{buildroot}%{_datadir}/locale/`basename $i .po`/LC_MESSAGES/imlib.mo $i
 done
 
+%if %{without gtk1}
+# Locales are only for the cfgeditor
+rm -rf %buildroot%_datadir/locale
+# And the pkgconfig file for imlibgdk shouldn't be installed either
+rm -f %buildroot%_libdir/pkgconfig/imlibgdk.pc
+%endif
+
 %multiarch_binaries %{buildroot}%{_bindir}/imlib-config
 
 # (sb) rpmlint
+%if %{with gtk1}
 chrpath -d %{buildroot}%{_bindir}/imlib_config
+%endif
 chrpath -d %{buildroot}%{_libdir}/*.so*
 
-%find_lang %{name}
+%find_lang %{name} || touch %name.lang
 
 %files
 %config(noreplace) %{_sysconfdir}/*
 
+%if %{with gtk1}
 %files cfgeditor -f %{name}.lang
 %{_bindir}/imlib_config
 %{_mandir}/man1/imlib_config*
 
-%files -n %{libname}
-%{_libdir}/libImlib.so.%{major}*
-
 %files -n %{libgdkname}
 %{_libdir}/libgdk_imlib.so.%{major}*
+
+%files -n %{devgdkname}
+%{_includedir}/gdk_*
+%{_libdir}/pkgconfig/imlibgdk.pc
+%{_libdir}/libgdk_imlib.so
+%endif
+
+%files -n %{libname}
+%{_libdir}/libImlib.so.%{major}*
 
 %files -n %{devname}
 %doc doc/*.gif doc/*.html README AUTHORS ChangeLog
@@ -161,9 +178,3 @@ chrpath -d %{buildroot}%{_libdir}/*.so*
 %{_libdir}/libImlib.so
 %{_libdir}/pkgconfig/imlib.pc
 %{_mandir}/man1/imlib-config*
-
-%files -n %{devgdkname}
-%{_includedir}/gdk_*
-%{_libdir}/pkgconfig/imlibgdk.pc
-%{_libdir}/libgdk_imlib.so
-

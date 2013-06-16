@@ -1,3 +1,5 @@
+removed_sources:
+  imlib-1.9.15.tar.bz2: c9a732a354fbb3c7e1a426e5d19fc92d73f8f720
 sources:
-  "imlib-1.9.15.tar.bz2": c9a732a354fbb3c7e1a426e5d19fc92d73f8f720
-  "imlib-pofiles.tar.bz2": 8c011dbb967adffccc26b972ea21e27bc43f07a7
+  imlib-1.9.15.tar.gz: 4e7343104e91c742ae7c1a2d58dce7a9fffd879f
+  imlib-pofiles.tar.bz2: 8c011dbb967adffccc26b972ea21e27bc43f07a7
