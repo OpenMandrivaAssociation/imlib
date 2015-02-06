@@ -10,7 +10,7 @@
 Summary:	An image loading and rendering library
 Name:		imlib
 Version:	1.9.15
-Release:	16
+Release:	17
 License:	LGPLv2
 Group:		System/Libraries
 Url:		http://www.enlightenment.org/Libraries/Imlib/	
