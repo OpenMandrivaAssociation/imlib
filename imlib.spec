@@ -13,7 +13,7 @@ Version:	1.9.15
 Release:	17
 License:	LGPLv2
 Group:		System/Libraries
-Url:		http://www.enlightenment.org/Libraries/Imlib/	
+Url:		https://www.enlightenment.org/Libraries/Imlib/	
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/imlib/%{url_ver}/%{name}-%{version}.tar.gz
 Source1:	imlib-pofiles.tar.bz2
 Patch0:		imlib-1.9-m4.patch
